@@ -1,38 +1,77 @@
 import java.util.*;
 
 public class Main {
-
-
     public static void main(String[] args) {
-
-        TreeMap<String,String> q = new TreeMap<>();
-        q.put("read","R");
-        q.put("write","W");
-        q.put("execute","X");
-
+        int x;
         Scanner scan = new Scanner(System.in);
-        TreeMap<String, List<String>> file = new TreeMap<>();
-
-        int N = Integer.parseInt(scan.nextLine());
-        for (int i = 0; i < N;i++){
-            String[] x = scan.nextLine().split(" ");
-            List<String> actions = Arrays.asList(x).subList(1, x.length);
-            file.put(x[0],actions);
+        Tree2 t = new Tree2();
+        while (true){
+            x = scan.nextInt();
+            if (x == 0){
+                break;
+            }
+            else {
+                t.insert(x);
+            }
         }
+        System.out.println(t.depth(t.root));
+    }
+}
 
-        int M = Integer.parseInt(scan.nextLine());
-        for (int i = 0; i < M;i++) {
-            String[] x = scan.nextLine().split(" ");
-            if (file.containsKey(x[1])){
-                if (file.get(x[1]).contains(q.get(x[0]))){
-                    System.out.println("OK");
+
+
+class Node {
+    int key;
+    Node leftchild;
+    Node rightchild;
+}
+
+class Tree2 {
+    Node root;
+    int rightside;
+    int leftside;
+
+    public void insert(int n) {
+        Node t = root;
+        int r = 1;
+        if(t == null ) {
+            root = new Node();
+            root.key = n;
+            return;
+        }
+        while(true) {
+            if(n > t.key){
+                if(t.rightchild != null) {
+                    t = t.rightchild;
+                } else {
+                    t.rightchild = new Node();
+                    t.rightchild.key = n;
+                    break;
                 }
-                else{
-                    System.out.println("Access denied");
+
+            } else if(n == t.key) {
+                break;
+            } else {
+                if(t.leftchild != null) {
+                    t = t.leftchild;
+
+                } else {
+                    t.leftchild = new Node();
+                    t.leftchild.key = n;
+                    break;
                 }
             }
         }
+    }
 
-
+    public int depth(Node node){
+        int max_count = -1;
+        if (node != null){
+            max_count = Math.max(depth(node.leftchild),depth(node.rightchild));
+        }
+        if (node == root){
+            return max_count;
+        }
+        return max_count + 1;
     }
 }
